@@ -13,7 +13,7 @@ spec:
           - path: "envs/**/env.json"
   template:
     metadata:
-      name: '{{.env}}-app'
+      name: '{{.env}}-{{.cluster_name}}-app'
     spec:
       project: default
       source:
