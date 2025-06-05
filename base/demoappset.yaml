@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps-per-env
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/Valinor/demo.git
+        revision: HEAD
+        files:
+          - path: "envs/**/env.json"
+  template:
+    metadata:
+      name: '{{.env}}-app'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Valinor/demo.git
+        targetRevision: HEAD
+        path: envs/{{.path.basename}}
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{.env}}'
